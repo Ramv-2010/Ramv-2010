@@ -1,1 +1,1 @@
-print('gitings hubbingss')
+print('gitings hubbings')
