@@ -6,7 +6,7 @@ import datetime
 
 root = tk.Tk()
 root.title("Bytes and Bolts Tech Hire")
-root.geometry("600x600")   # MAKE SCREEN BiGGER
+root.geometry("700x600")
 root.configure(bg = "#DCEEFF")
 
 def gen_vald_receipt_num ():
@@ -18,21 +18,37 @@ def gen_vald_receipt_num ():
         else:
             return new_receipt_num
 
+def confirm_hire (user_current_confirmed_receipt_num):
+    #need to open and upload to JSON
+    #add r num to the past r num list
+    user_confirmed_name = name_entry.get()
+    if not user_confirmed_name.isalpha():
+        print("You have either left the name field empty or have numbers in your name entry please retry")
+
+    user_confirmed_hiring_item = hire_item_combo_box.get()
+    if not user_confirmed_hiring_item in hire_items_avaliable_list:
+        print("Please enter the a item that we have you have entered an item not in our system please tryagain and submit")
+    user_confirmed_hiring_quantity = hire_quantity_spinbox.get()
+    if not int(user_confirmed_hiring_quantity):
+        if 1 <= user_confirmed_hiring_quantity  <= 20:
+            print("Please enter a valid number")
+    user_confirmed_hiring_date = date_hire_gui_calendar.get_date()
+
+    print(f"{user_confirmed_name} and {user_confirmed_hiring_item} and {user_confirmed_hiring_quantity} and {user_confirmed_hiring_date}")
+
 #Main Title Frame
 title_frame = tk.Frame(root, bg = "#102542", pady = 20)
-title_frame.place(x = 0, y = 0, width = 600)
+title_frame.place(x = 0, y = 0, width = 700)
 
 #actual Main Title
 title_label = tk.Label(title_frame, text = "⚡ BYTES & BOLTS TECH HIRE ⚡", font= ("Arial",22, "bold"), bg = "#102542")
 title_label.pack()
 
-hire_menu_label = tk.Label(text= "Hire A Item!!!", bg = "#DCEEFF", fg = "Black", font = ("Arial", 18, "bold"))
-hire_menu_label.place(x=240, y = 115)
-
-
+hire_menu_label = tk.Label(text= "Hire A Item!!!", bg = "#DCEEFF", fg = "Black", font = ("Arial", 20, "bold"))
+hire_menu_label.place(x=300, y = 100)
 
 hire_widgets_frame = tk.Frame(root, bg = "White")
-hire_widgets_frame.place(x= 50, y=160, width= 500, height = 380)
+hire_widgets_frame.place(x= 100, y=150, width= 500, height = 415)
 
 user_current_r_num  = gen_vald_receipt_num()
 receipt_number_label = tk.Label(hire_widgets_frame,text = f" Receipt Number : {user_current_r_num}")
@@ -45,7 +61,8 @@ name_entry.place(x = 150, y = 55)
 
 hire_item_label = tk.Label(hire_widgets_frame, text = "Hire Item", bg = "white", fg= "black")
 hire_item_label.place(x = 60, y = 100)
-hire_item_combo_box = ttk.Combobox(hire_widgets_frame,values=["Computer", "Mouse", "PC", "Laptop","Keyboard"])
+hire_items_avaliable_list = ["Computer", "Mouse", "PC", "Laptop","Keyboard"]
+hire_item_combo_box = ttk.Combobox(hire_widgets_frame,values=hire_items_avaliable_list)
 hire_item_combo_box.place(x = 150, y = 100)
 
 hire_quantity_label = tk.Label(hire_widgets_frame, text= "Hire Quantity", bg = "white", fg= "black")
@@ -55,10 +72,14 @@ hire_quantity_spinbox = tk.Spinbox(hire_widgets_frame, values=quantities_list)
 hire_quantity_spinbox.place(x = 150, y = 150)
 
 date_hire_cal_label = tk.Label(hire_widgets_frame, text = "Date Hire", bg = "white", fg= "black")
-date_hire_cal_label.place(x = 60, y = 190)
-
+date_hire_cal_label.place(x = 60, y = 240)
 date_hire_gui_calendar = Calendar(hire_widgets_frame, mindate= datetime.date.today(), background="#4A90E2",foreground="white",selectbackground="#FF6B6B", selectforeground="white",  weekendbackground="#F0F0F0", weekendforeground="red",)
 date_hire_gui_calendar.place(x = 150, y = 190)
+
+confirm_hire_button = tk.Button(hire_widgets_frame, text= "Hire Item", background= "white", height= 2, width= 8, command= lambda: confirm_hire(user_current_r_num))
+confirm_hire_button.place(x = 200, y = 365)
+
+
 
 date_hire_gui_calendar.get_date()
 root.mainloop()
