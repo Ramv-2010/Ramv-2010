@@ -9,47 +9,55 @@ root.title("Bytes and Bolts Tech Hire")
 root.geometry("700x600")
 root.configure(bg = "#DCEEFF")
 
-
-def gen_receipt_num ():
-    user_receipt_num = random.randint(a=100000, b=999999)
-    return user_receipt_num
+current_reciept_nums_in_use_list = []  # go into user data later
+hire_items_avaliable_list = ["Computer", "Mouse", "PC", "Laptop","Keyboard"]
+valid_items = []
+non_valid_items = []
 
 def check_and_gen_vald_receipt_num ():
     while True:
-        new_receipt_num = gen_receipt_num()
-        current_reciept_nums_in_use_list = [] # go into user data later
-        if new_receipt_num in current_reciept_nums_in_use_list:
-            pass
+        user_receipt_num = random.randint(a=100000, b=999999)
+        if user_receipt_num in current_reciept_nums_in_use_list:
+            current_reciept_nums_in_use_list.remove(user_receipt_num)
+
         else:
+            current_reciept_nums_in_use_list.append(user_receipt_num)
+            valid_items.append(user_receipt_num)
+            return user_receipt_num
 
-            return new_receipt_num
 
-def confirm_hire (user_current_confirmed_receipt_num):
-    #need to open and upload to JSON
-    #add r num to the past r num list
+def confirm_hire_vald():
     user_confirmed_name = name_entry.get()
     if not user_confirmed_name.isalpha():
         if user_confirmed_name == "":
             print("You have left the name field empty, please reenter this field and resubmit your entry")
         else:
             print("Please enter a valid name (No Special Characters or Numbers)")
-
+    else:
+        valid_items.append(user_confirmed_name)
 
     user_confirmed_hiring_item = hire_item_combo_box.get()
     if not user_confirmed_hiring_item in hire_items_avaliable_list:
         print("Please enter the a item that we have you have entered an item not in our system please tryagain and submit")
+    else:
+        valid_items.append(user_confirmed_hiring_item)
 
     try:
         user_confirmed_hiring_quantity = int(hire_quantity_spinbox.get())
-
-        if 1 <= user_confirmed_hiring_quantity  <= 20:
-                print("Please enter a valid number (Between 1 and 20)")
-        user_confirmed_hiring_date = date_hire_gui_calendar.get_date()
+        if  user_confirmed_hiring_quantity <  1 or user_confirmed_hiring_quantity > 20:
+            print("Please enter a valid number (Between 1 and 20)")
+        else:
+            valid_items.append(user_confirmed_hiring_quantity)
 
     except ValueError:
-        print("Please enter a number")
+        print("Please enter a number (only digits)")
 
-    print(f"{user_confirmed_name} , {user_confirmed_hiring_item} , {user_confirmed_hiring_quantity} , {user_confirmed_hiring_date}")
+    valid_items.append(date_hire_gui_calendar.get_date())
+
+    print(f"{valid_items}")
+
+def store_data():
+
 
 #Main Title Frame
 title_frame = tk.Frame(root, bg = "#102542", pady = 20)
@@ -76,7 +84,7 @@ name_entry.place(x = 150, y = 55)
 
 hire_item_label = tk.Label(hire_widgets_frame, text = "Hire Item", bg = "white", fg= "black")
 hire_item_label.place(x = 60, y = 100)
-hire_items_avaliable_list = ["Computer", "Mouse", "PC", "Laptop","Keyboard"]
+
 hire_item_combo_box = ttk.Combobox(hire_widgets_frame,values=hire_items_avaliable_list)
 hire_item_combo_box.place(x = 150, y = 100)
 
@@ -91,10 +99,7 @@ date_hire_cal_label.place(x = 60, y = 240)
 date_hire_gui_calendar = Calendar(hire_widgets_frame, mindate= datetime.date.today(), background="#4A90E2",foreground="white",selectbackground="#FF6B6B", selectforeground="white",  weekendbackground="#F0F0F0", weekendforeground="red",)
 date_hire_gui_calendar.place(x = 150, y = 190)
 
-confirm_hire_button = tk.Button(hire_widgets_frame, text= "Hire Item", background= "white", height= 2, width= 8, command= lambda: confirm_hire(user_current_r_num))
+confirm_hire_button = tk.Button(hire_widgets_frame, text= "Hire Item", background= "white", height= 2, width= 8, command= lambda: confirm_hire_vald())
 confirm_hire_button.place(x = 200, y = 365)
 
-
-
-date_hire_gui_calendar.get_date()
 root.mainloop()
