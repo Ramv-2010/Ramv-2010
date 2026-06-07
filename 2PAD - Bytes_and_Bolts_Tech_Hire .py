@@ -9,13 +9,19 @@ root.title("Bytes and Bolts Tech Hire")
 root.geometry("700x600")
 root.configure(bg = "#DCEEFF")
 
-def gen_vald_receipt_num ():
+
+def gen_receipt_num ():
+    user_receipt_num = random.randint(a=100000, b=999999)
+    return user_receipt_num
+
+def check_and_gen_vald_receipt_num ():
     while True:
-        new_receipt_num = random.randint(a=100000, b = 999999)
+        new_receipt_num = gen_receipt_num()
         current_reciept_nums_in_use_list = [] # go into user data later
         if new_receipt_num in current_reciept_nums_in_use_list:
             pass
         else:
+
             return new_receipt_num
 
 def confirm_hire (user_current_confirmed_receipt_num):
@@ -23,18 +29,27 @@ def confirm_hire (user_current_confirmed_receipt_num):
     #add r num to the past r num list
     user_confirmed_name = name_entry.get()
     if not user_confirmed_name.isalpha():
-        print("You have either left the name field empty or have numbers in your name entry please retry")
+        if user_confirmed_name == "":
+            print("You have left the name field empty, please reenter this field and resubmit your entry")
+        else:
+            print("Please enter a valid name (No Special Characters or Numbers)")
+
 
     user_confirmed_hiring_item = hire_item_combo_box.get()
     if not user_confirmed_hiring_item in hire_items_avaliable_list:
         print("Please enter the a item that we have you have entered an item not in our system please tryagain and submit")
-    user_confirmed_hiring_quantity = hire_quantity_spinbox.get()
-    if not int(user_confirmed_hiring_quantity):
-        if 1 <= user_confirmed_hiring_quantity  <= 20:
-            print("Please enter a valid number")
-    user_confirmed_hiring_date = date_hire_gui_calendar.get_date()
 
-    print(f"{user_confirmed_name} and {user_confirmed_hiring_item} and {user_confirmed_hiring_quantity} and {user_confirmed_hiring_date}")
+    try:
+        user_confirmed_hiring_quantity = int(hire_quantity_spinbox.get())
+
+        if 1 <= user_confirmed_hiring_quantity  <= 20:
+                print("Please enter a valid number (Between 1 and 20)")
+        user_confirmed_hiring_date = date_hire_gui_calendar.get_date()
+
+    except ValueError:
+        print("Please enter a number")
+
+    print(f"{user_confirmed_name} , {user_confirmed_hiring_item} , {user_confirmed_hiring_quantity} , {user_confirmed_hiring_date}")
 
 #Main Title Frame
 title_frame = tk.Frame(root, bg = "#102542", pady = 20)
@@ -50,7 +65,7 @@ hire_menu_label.place(x=300, y = 100)
 hire_widgets_frame = tk.Frame(root, bg = "White")
 hire_widgets_frame.place(x= 100, y=150, width= 500, height = 415)
 
-user_current_r_num  = gen_vald_receipt_num()
+user_current_r_num  = check_and_gen_vald_receipt_num()
 receipt_number_label = tk.Label(hire_widgets_frame,text = f" Receipt Number : {user_current_r_num}")
 receipt_number_label.place(x = 175, y = 15)
 
