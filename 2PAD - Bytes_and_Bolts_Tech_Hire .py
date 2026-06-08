@@ -11,7 +11,7 @@ root.configure(bg = "#DCEEFF")
 
 current_reciept_nums_in_use_list = []  # go into user data later
 hire_items_avaliable_list = ["Computer", "Mouse", "PC", "Laptop","Keyboard"]
-valid_items = []
+valid_items_user_dict = {}
 non_valid_items = []
 
 def check_and_gen_vald_receipt_num ():
@@ -22,7 +22,7 @@ def check_and_gen_vald_receipt_num ():
 
         else:
             current_reciept_nums_in_use_list.append(user_receipt_num)
-            valid_items.append(user_receipt_num)
+            valid_items_user_dict["user_receipt_number"] = user_receipt_num
             return user_receipt_num
 
 
@@ -34,30 +34,45 @@ def confirm_hire_vald():
         else:
             print("Please enter a valid name (No Special Characters or Numbers)")
     else:
-        valid_items.append(user_confirmed_name)
+        valid_items_user_dict["user_name"] = user_confirmed_name
+        print(valid_items_user_dict)
+
 
     user_confirmed_hiring_item = hire_item_combo_box.get()
     if not user_confirmed_hiring_item in hire_items_avaliable_list:
         print("Please enter the a item that we have you have entered an item not in our system please tryagain and submit")
     else:
-        valid_items.append(user_confirmed_hiring_item)
+        valid_items_user_dict["user_hire_item "] = user_confirmed_hiring_item
+        print(valid_items_user_dict)
 
     try:
         user_confirmed_hiring_quantity = int(hire_quantity_spinbox.get())
         if  user_confirmed_hiring_quantity <  1 or user_confirmed_hiring_quantity > 20:
             print("Please enter a valid number (Between 1 and 20)")
         else:
-            valid_items.append(user_confirmed_hiring_quantity)
+            valid_items_user_dict["user_hire_qty"] = user_confirmed_hiring_quantity
+            print(valid_items_user_dict)
 
     except ValueError:
         print("Please enter a number (only digits)")
 
-    valid_items.append(date_hire_gui_calendar.get_date())
+    valid_items_user_dict["user_hire_date"] = date_hire_gui_calendar.get_date()
+    print(valid_items_user_dict)
 
-    print(f"{valid_items}")
+def store_data(user_name, user_hire_item, user_hire_qty, user_hire_date):
 
-def store_data():
+    while True:
+        try:
+            with open(file= "users_data.json", mode = "r") as data_file:
+                users_data_list = data_file.readlines()
+                print(users_data_list)
+            with open(file= "users_data.json", mode = "W") as write_data_file:
+                users_data_list.append(valid_items_user_dict)
+                write_data_file.write(users_data_list)
 
+        except FileNotFoundError:
+            with open(file="users_data.json", mode="w") as new_data_file:
+                new_data_file.write(f"{valid_items_user_dict}")
 
 #Main Title Frame
 title_frame = tk.Frame(root, bg = "#102542", pady = 20)
