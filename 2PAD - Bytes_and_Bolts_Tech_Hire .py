@@ -12,8 +12,9 @@ root.configure(bg = "#D7E9FA")
 
 receipt_numbers_in_use= []  # go into user data later
 items_avaliable_list =["Computer", "Mouse", "PC","Laptop","Keyboard"]
+
 # i used thi type of structure for my program because it enabled me to esaily add it to the json fiel and was easy to acces woth name
-user_valid_non_vald_items = {"user_name" :{"user_receipt_number": 0, "user_vald_status": False, "user_hire_item": "", "user_hire_qty": 0, "user_hire_date" : datetime.datetime.today()}}
+#user_valid_non_vald_items = {user_name :{"user_receipt_number": 0, "user_vald_status": False, "user_hire_item": "", "user_hire_qty": 0, "user_hire_date" : datetime.datetime.today()}}
 #structure is gonna be like this : user_valid_non_vald_items = {user_name:{vald_status: val, value: val}}
 #prototype
 
@@ -23,7 +24,6 @@ def check_and_gen_vald_receipt_num ():
         receipt_num = random.randint(a=100000, b=999999)
         if not receipt_num in receipt_numbers_in_use:
             receipt_numbers_in_use.append(receipt_num)
-            user_valid_non_vald_items["user_name"] ["user_receipt_number"] = receipt_num
             return receipt_num
 
 def confirm_inputs_vald():
@@ -34,30 +34,26 @@ def confirm_inputs_vald():
         else:
             print("Please enter a valid name (No Special Characters or Numbers)")
     else:
-        # Error 1 i had a error when i tried to chnage my key as when what i did was chnage the key of the dictinary which
-        # didnt have username as a key therefore I got a key Value error to fix this i had to chnaage my statement so that instead i
-        user_valid_non_vald_items["user_name"].pop(user_confirmed_name)
-        print(user_valid_non_vald_items)
+        pass
+    # Error 1 i had a error when i tried to chnage my key as when what i did was chnage the key of the dictinary which
+    # didnt have username as a key therefore I got a key Value error to fix this i had to chnaage my statement so that instead i
 
     user_confirmed_hiring_item = hire_item_combo_box.get()
     if not user_confirmed_hiring_item in items_avaliable_list:
         print("Please enter the a item that we have you have entered an item not in our system please tryagain and submit")
-    else:
-        user_valid_non_vald_items["user_hire_item"] = user_confirmed_hiring_item
-        print(user_valid_non_vald_items)
+
 
     try:
         user_confirmed_hiring_quantity = int(hire_quantity_spinbox.get())
         if  user_confirmed_hiring_quantity <=  1 or user_confirmed_hiring_quantity >= 20:
             print("Please enter a valid number (Between 1 and 20)")
         else:
-            user_valid_non_vald_items["user_hire_qty"] = user_confirmed_hiring_quantity
-            print(user_valid_non_vald_items)
+            pass
 
     except ValueError:
         print("Please enter a number (only digits)")
 
-    user_valid_non_vald_items["user_hire_date"] = date_hire_gui_calendar.get_date()
+    date_hire_gui_calendar.get_date()
     store_data(user_name =user_confirmed_name, user_hire_item=user_confirmed_hiring_item, user_hire_qty= user_confirmed_hiring_quantity , user_hire_date= user_confirmed_hiring_item["user_hire_date"])
 
 def store_data(user_name, user_hire_item, user_hire_qty, user_hire_date):
@@ -68,12 +64,12 @@ def store_data(user_name, user_hire_item, user_hire_qty, user_hire_date):
                 prev_users_data_dict = data_file.readlines()
                 print(prev_users_data_dict)
             with open(file= "users_data.json", mode = "w") as write_data_file:
-                # new_users_data_dict = {"user_name" : user_name, "user_hire_item" : user_hire_item, "user_hire_qty" : user_hire_qty, "user_hire_date":  user_hire_date}
-                json.dump(obj= user_valid_non_vald_items,fp= write_data_file, indent = 4)
+                new_users_data_dict = {"user_name" : user_name, "user_hire_item" : user_hire_item, "user_hire_qty" : user_hire_qty, "user_hire_date":  user_hire_date}
+                json.dump(obj= new_users_data_dict ,fp= write_data_file, indent = 4)
 
         except FileNotFoundError:
             with open(file="users_data.json", mode="w") as new_data_file:
-                new_data_file.write(f"{user_valid_non_vald_items}")
+                new_data_file.write(f"{new_users_data_dict}")
 
 #Main Title Frame
 title_frame = tk.Frame(root, bg= "#102542", pady = 20)
