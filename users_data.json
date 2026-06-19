@@ -1,7 +1,14 @@
 {
-    "": {
-        "user_receipt_number": 368661,
-        "user_vald_status": false,
-        "user_hire_item": "",
-        "user_hire_qty": 0,
-        "user_hire_date": 
+    "Ram": {
+        "user_receipt_num": 612018,
+        "user_hire_item": "PC",
+        "user_hire_qty": 4,
+        "user_hire_date": "7/9/26"
+    },
+    "ram": {
+        "user_receipt_num": 470560,
+        "user_hire_item": "Mouse",
+        "user_hire_qty": 3,
+        "user_hire_date": "7/1/26"
+    }
+}
